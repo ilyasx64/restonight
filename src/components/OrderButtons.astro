@@ -1,0 +1,42 @@
+---
+import { getDelivery, getGeneral } from "../lib/content";
+
+const delivery = await getDelivery();
+const general = await getGeneral();
+
+const buttons = [
+  delivery.uber_eats_url ? { label: 'Uber Eats', url: delivery.uber_eats_url, emoji: '🛵', color: 'bg-[#06C167]' } : null,
+  delivery.deliveroo_url ? { label: 'Deliveroo', url: delivery.deliveroo_url, emoji: '🚲', color: 'bg-[#00CCBC]' } : null,
+  delivery.just_eat_url  ? { label: 'Just Eat',  url: delivery.just_eat_url,  emoji: '🥡', color: 'bg-[#FF8000]' } : null,
+].filter(Boolean) as { label: string; url: string; emoji: string; color: string }[];
+---
+<section id="commander" class="py-16 md:py-24 bg-resto-green">
+  <div class="max-w-5xl mx-auto px-4 text-center">
+    <h2 class="font-display text-5xl md:text-7xl text-resto-neon neon-glow mb-4">
+      COMMANDER
+    </h2>
+    <p class="text-resto-cream/70 mb-10">
+      Sur place, à emporter ou livré chez toi.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+      <a
+        href={`tel:${general.telephone}`}
+        class="px-6 py-6 bg-resto-neon text-white font-display text-3xl tracking-wider rounded-2xl hover:bg-resto-neon-glow transition shadow-xl shadow-resto-neon/30 flex items-center justify-center gap-3"
+      >
+        📞 APPELER
+      </a>
+
+      {buttons.map((b) => (
+        <a
+          href={b.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`px-6 py-6 ${b.color} text-white font-display text-3xl tracking-wider rounded-2xl hover:opacity-90 transition shadow-xl flex items-center justify-center gap-3`}
+        >
+          {b.emoji} {b.label.toUpperCase()}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
