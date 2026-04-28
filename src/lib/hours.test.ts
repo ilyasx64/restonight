@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeOpenStatus, type Hours } from './hours';
+import { computeOpenStatus, nowInParis, type Hours } from './hours';
 
 const WEEKDAY_NIGHT: Hours = {
   schedule: {
@@ -35,6 +35,12 @@ describe('computeOpenStatus', () => {
   it('Tuesday 03:00 (after fermeture 02:00) is closed', () => {
     const result = computeOpenStatus(WEEKDAY_NIGHT, dateAt(1, 3, 0));
     expect(result.status).toBe('closed');
+    if (result.status === 'closed' && 'opensAt' in result) {
+      expect(result.opensAt).toBe('18:00');
+      expect(result.openDay).toBe('mardi');
+    } else {
+      throw new Error('expected closed with opensAt');
+    }
   });
 
   it('day with ferme=true is closed and proposes next opening', () => {
@@ -49,6 +55,9 @@ describe('computeOpenStatus', () => {
     expect(result.status).toBe('closed');
     if (result.status === 'closed' && 'opensAt' in result) {
       expect(result.opensAt).toBe('18:00');
+      expect(result.openDay).toBe('mercredi');
+    } else {
+      throw new Error('expected closed with opensAt');
     }
   });
 
@@ -81,18 +90,52 @@ describe('computeOpenStatus', () => {
     };
     const result = computeOpenStatus(hours, dateAt(1, 20, 0));
     expect(result.status).toBe('closed');
-    if (result.status === 'closed' && 'opensAt' in result) {
-      expect(result.opensAt).toBeUndefined();
-    }
+    expect(result).not.toHaveProperty('opensAt');
+    expect(result).not.toHaveProperty('reason');
   });
 
   it('exact opening time 18:00 is open', () => {
     const result = computeOpenStatus(WEEKDAY_NIGHT, dateAt(1, 18, 0));
     expect(result.status).toBe('open');
+    if (result.status === 'open') {
+      expect(result.closesAt).toBe('02:00');
+    }
   });
 
   it('exact closing time 02:00 is closed', () => {
     const result = computeOpenStatus(WEEKDAY_NIGHT, dateAt(1, 2, 0));
     expect(result.status).toBe('closed');
+    if (result.status === 'closed' && 'opensAt' in result) {
+      expect(result.opensAt).toBe('18:00');
+      expect(result.openDay).toBe('mardi');
+    } else {
+      throw new Error('expected closed with opensAt');
+    }
+  });
+});
+
+describe('nowInParis', () => {
+  it('returns a Date whose UTC hours match Paris local hours', () => {
+    const before = Date.now();
+    const result = nowInParis();
+    const after = Date.now();
+
+    // The result's UTC hour should equal the actual current Paris local hour.
+    const parisHour = parseInt(
+      new Date().toLocaleString('en-US', {
+        timeZone: 'Europe/Paris',
+        hour: '2-digit',
+        hour12: false,
+      }),
+      10,
+    );
+    // Note: the parsed value is "00".."23" — handle "24" if it appears as midnight.
+    expect(result.getUTCHours()).toBe(parisHour % 24);
+
+    // Result should be near "now" (within ~10s of when the call started/ended)
+    // shifted by the Paris UTC offset, so we can't compare absolute time directly.
+    // We just assert the call returned a valid Date.
+    expect(result.getTime()).toBeGreaterThan(0);
+    expect(after - before).toBeLessThan(10000);
   });
 });

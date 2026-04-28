@@ -102,3 +102,42 @@ export function computeOpenStatus(hours: Hours, now: Date): OpenStatus {
 
   return { status: 'closed' };
 }
+
+/**
+ * Return a Date whose UTC representation reflects current Paris wall-clock time.
+ *
+ * Schedule times are stored as Paris local clock values ("18:00" means 18:00 Paris).
+ * computeOpenStatus extracts hours via getUTC* methods, so callers must pass a Date
+ * that has been shifted such that UTC == Paris local. Use this helper at every
+ * call site in browser/SSR code instead of `new Date()`.
+ */
+export function nowInParis(): Date {
+  const local = new Date();
+  // Use formatToParts to reliably extract Paris wall-clock components
+  // (toLocaleString → new Date() round-trip is not reliable across all runtimes).
+  const fmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  });
+  const parts = Object.fromEntries(
+    fmt.formatToParts(local).map((p) => [p.type, p.value]),
+  ) as Record<string, string>;
+  // Reconstruct a Date whose UTC representation equals Paris wall-clock time,
+  // so that getUTC* methods return the correct Paris local values.
+  return new Date(
+    Date.UTC(
+      parseInt(parts['year']!),
+      parseInt(parts['month']!) - 1,
+      parseInt(parts['day']!),
+      parseInt(parts['hour']!) % 24,
+      parseInt(parts['minute']!),
+      parseInt(parts['second']!),
+    ),
+  );
+}
