@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  categories: CollectionEntry<"categories">[];
+}
+
+const { categories } = Astro.props;
+---
+<div
+  id="category-filter"
+  class="sticky top-0 z-30 bg-resto-green-deep/95 backdrop-blur-md border-b border-resto-green-light py-3"
+>
+  <div class="overflow-x-auto px-4 -mx-4">
+    <ul class="flex gap-2 w-max">
+      <li>
+        <button
+          type="button"
+          data-category="all"
+          class="cat-chip px-4 py-2 rounded-full bg-resto-neon text-white font-medium text-sm whitespace-nowrap transition"
+        >
+          Tout
+        </button>
+      </li>
+      {categories.map((cat) => (
+        <li>
+          <button
+            type="button"
+            data-category={cat.id}
+            class="cat-chip px-4 py-2 rounded-full bg-resto-green-light/50 text-resto-cream font-medium text-sm whitespace-nowrap hover:bg-resto-green-light transition"
+          >
+            {cat.data.emoji ?? ''} {cat.data.nom}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.cat-chip');
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.category!;
+      chips.forEach((c) => {
+        c.classList.remove('bg-resto-neon', 'text-white');
+        c.classList.add('bg-resto-green-light/50', 'text-resto-cream');
+      });
+      chip.classList.remove('bg-resto-green-light/50', 'text-resto-cream');
+      chip.classList.add('bg-resto-neon', 'text-white');
+      document.querySelectorAll<HTMLElement>('[data-category-section]').forEach((sec) => {
+        const match = cat === 'all' || sec.dataset.categorySection === cat;
+        sec.style.display = match ? '' : 'none';
+      });
+    });
+  });
+</script>
