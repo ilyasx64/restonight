@@ -1,0 +1,17 @@
+---
+import { getGeneral } from "../lib/content";
+const general = await getGeneral();
+const year = new Date().getFullYear();
+---
+<footer class="bg-resto-black text-resto-cream/60 py-10 px-4 text-sm">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <div>
+      <p class="font-display text-xl text-resto-neon">{general.nom.toUpperCase()}</p>
+      <p>{general.adresse}</p>
+    </div>
+    <div class="text-center md:text-right">
+      <p>© {year} {general.nom}. Tous droits réservés.</p>
+      <a href="/admin/" class="text-resto-cream/30 hover:text-resto-neon text-xs transition">Espace gérant</a>
+    </div>
+  </div>
+</footer>
