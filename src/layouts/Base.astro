@@ -1,0 +1,68 @@
+---
+import "../styles/global.css";
+import { getGeneral, getHours } from "../lib/content";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const general = await getGeneral();
+const hoursData = await getHours();
+
+const siteTitle = title ?? `${general.nom} — Snack à Amiens, ouvert jusqu'à 02h`;
+const siteDescription = description ?? `${general.nom} — ${general.slogan}. ${general.adresse}. Tacos, kebabs, burgers à Amiens.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  name: general.nom,
+  description: general.slogan,
+  telephone: general.telephone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "34 Rue du Hocquet",
+    addressLocality: "Amiens",
+    postalCode: "80000",
+    addressCountry: "FR",
+  },
+  url: canonical,
+  servesCuisine: ["Tacos", "Burgers", "Kebabs", "Fast Food"],
+  priceRange: "1-10€",
+  openingHoursSpecification: Object.entries(hoursData.schedule)
+    .filter(([, s]) => !s.ferme)
+    .map(([day, s]) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
+      opens: s.ouverture,
+      closes: s.fermeture,
+    })),
+};
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0F2A1D" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:type" content="restaurant" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(general.photo_devanture, Astro.site).toString()} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="grain bg-resto-green-deep text-resto-cream antialiased">
+    <slot />
+  </body>
+</html>
