@@ -1,0 +1,48 @@
+---
+import { getHours } from "../lib/content";
+import type { Hours } from "../lib/hours";
+
+const hoursData = (await getHours()) as unknown as Hours;
+const order: Array<keyof typeof hoursData.schedule> = [
+  'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche',
+];
+
+const todayIso = new Date().toISOString().slice(0, 10);
+const todayException = hoursData.fermetures_exceptionnelles.find((e) => e.date === todayIso);
+---
+<div class="bg-resto-green-light/30 rounded-2xl p-6 border border-resto-green-light">
+  <h3 class="font-display text-3xl text-resto-orange mb-4">HORAIRES</h3>
+
+  {todayException && (
+    <div class="mb-4 p-3 rounded-lg bg-resto-neon/20 border border-resto-neon text-resto-neon text-sm">
+      ⚠️ Fermé exceptionnellement aujourd'hui : {todayException.raison}
+    </div>
+  )}
+
+  <ul class="divide-y divide-resto-green-light">
+    {order.map((day) => {
+      const s = hoursData.schedule[day];
+      return (
+        <li class="flex items-center justify-between py-2">
+          <span class="capitalize text-resto-cream/90">{day}</span>
+          <span class="font-mono text-resto-cream/70">
+            {s.ferme ? 'Fermé' : `${s.ouverture} – ${s.fermeture}`}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+
+  {hoursData.fermetures_exceptionnelles.length > 0 && (
+    <div class="mt-4 pt-4 border-t border-resto-green-light">
+      <h4 class="text-sm text-resto-cream/60 mb-2">Fermetures à venir</h4>
+      <ul class="text-sm space-y-1">
+        {hoursData.fermetures_exceptionnelles
+          .filter((e) => e.date >= todayIso)
+          .map((e) => (
+            <li class="text-resto-cream/80">{e.date} — {e.raison}</li>
+          ))}
+      </ul>
+    </div>
+  )}
+</div>
