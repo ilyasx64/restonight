@@ -1,0 +1,163 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: simple
+media_folder: "public/uploads"
+public_folder: "/uploads"
+locale: "fr"
+site_url: https://restonight.netlify.app
+display_url: https://restonight.netlify.app
+logo_url: /favicon.svg
+
+collections:
+  - name: "general"
+    label: "Infos générales"
+    delete: false
+    files:
+      - file: "src/content/general/general.md"
+        label: "Infos du restaurant"
+        name: "general"
+        fields:
+          - { label: "Nom", name: "nom", widget: "string" }
+          - { label: "Slogan", name: "slogan", widget: "string" }
+          - { label: "Téléphone", name: "telephone", widget: "string", hint: "Format : 0322470183 (sans espaces)" }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Adresse", name: "adresse", widget: "string" }
+          - { label: "Photo de la devanture", name: "photo_devanture", widget: "image" }
+          - { label: "URL Facebook", name: "facebook_url", widget: "string", required: false }
+          - { label: "URL Instagram", name: "instagram_url", widget: "string", required: false }
+          - { label: "URL Google Maps", name: "google_maps_url", widget: "string", required: false }
+
+  - name: "hours"
+    label: "Horaires"
+    delete: false
+    files:
+      - file: "src/content/hours/hours.json"
+        label: "Horaires d'ouverture"
+        name: "hours"
+        fields:
+          - label: "Horaires de la semaine"
+            name: "schedule"
+            widget: "object"
+            fields:
+              - label: "Lundi"
+                name: "lundi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Mardi"
+                name: "mardi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Mercredi"
+                name: "mercredi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Jeudi"
+                name: "jeudi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Vendredi"
+                name: "vendredi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Samedi"
+                name: "samedi"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+              - label: "Dimanche"
+                name: "dimanche"
+                widget: "object"
+                fields:
+                  - { label: "Fermé", name: "ferme", widget: "boolean", default: false }
+                  - { label: "Ouverture", name: "ouverture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+                  - { label: "Fermeture", name: "fermeture", widget: "string", pattern: ['^\d{2}:\d{2}$', 'Format HH:MM'] }
+          - label: "Fermetures exceptionnelles"
+            name: "fermetures_exceptionnelles"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Date (AAAA-MM-JJ)", name: "date", widget: "string", pattern: ['^\d{4}-\d{2}-\d{2}$', 'Format AAAA-MM-JJ'] }
+              - { label: "Raison", name: "raison", widget: "string" }
+
+  - name: "delivery"
+    label: "Liens de commande"
+    delete: false
+    files:
+      - file: "src/content/delivery/delivery.json"
+        label: "Liens de commande externe"
+        name: "delivery"
+        fields:
+          - { label: "URL Uber Eats", name: "uber_eats_url", widget: "string", required: false }
+          - { label: "URL Deliveroo", name: "deliveroo_url", widget: "string", required: false }
+          - { label: "URL Just Eat", name: "just_eat_url", widget: "string", required: false }
+
+  - name: "categories"
+    label: "Catégories du menu"
+    label_singular: "Catégorie"
+    folder: "src/content/categories"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Nom", name: "nom", widget: "string" }
+      - { label: "Ordre d'affichage", name: "ordre", widget: "number", value_type: "int", min: 0 }
+      - { label: "Emoji (optionnel)", name: "emoji", widget: "string", required: false }
+
+  - name: "dishes"
+    label: "Plats"
+    label_singular: "Plat"
+    folder: "src/content/dishes"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Nom du plat", name: "nom", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Prix (€)", name: "prix", widget: "number", value_type: "float", min: 0, step: 0.10 }
+      - label: "Catégorie"
+        name: "categorie"
+        widget: "relation"
+        collection: "categories"
+        search_fields: ["nom"]
+        value_field: "{{slug}}"
+        display_fields: ["nom"]
+      - { label: "Photo", name: "photo", widget: "image", required: false }
+      - label: "Tags"
+        name: "tags"
+        widget: "select"
+        multiple: true
+        required: false
+        options:
+          - { label: "⭐ Populaire", value: "populaire" }
+          - { label: "🆕 Nouveau",   value: "nouveau" }
+          - { label: "🌶️ Épicé",    value: "epice" }
+          - { label: "🥦 Végé",      value: "vege" }
+      - { label: "Disponible (sinon masqué du site)", name: "disponible", widget: "boolean", default: true }
+      - label: "Variantes (L/XL etc., optionnel)"
+        name: "variantes"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Nom de la variante", name: "nom", widget: "string" }
+          - { label: "Prix de la variante (€)", name: "prix", widget: "number", value_type: "float", min: 0, step: 0.10 }
