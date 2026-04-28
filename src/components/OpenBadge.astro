@@ -1,0 +1,70 @@
+---
+import { getHours } from "../lib/content";
+import { computeOpenStatus, nowInParis, type Hours } from "../lib/hours";
+
+const hoursData = await getHours() as unknown as Hours;
+// Initial server-rendered state (will be refreshed client-side)
+const initial = computeOpenStatus(hoursData, nowInParis());
+const initialLabel = initial.status === 'open' ? 'OUVERT' : 'FERMÉ';
+const initialDetail = initial.status === 'open'
+  ? `Ferme à ${initial.closesAt}`
+  : (initial.status === 'closed' && 'reason' in initial && initial.reason === 'exceptional')
+    ? initial.details
+    : (initial.status === 'closed' && 'opensAt' in initial && initial.opensAt)
+      ? `Ouvre ${initial.openDay} à ${initial.opensAt}`
+      : 'Fermé';
+---
+<div
+  id="open-badge"
+  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-resto-green-light/50 backdrop-blur-sm border border-resto-neon/30"
+  data-hours={JSON.stringify(hoursData)}
+>
+  <span
+    id="open-badge-dot"
+    class:list={[
+      'w-2 h-2 rounded-full',
+      initial.status === 'open' ? 'bg-resto-neon pulse-neon' : 'bg-resto-cream/50',
+    ]}
+  ></span>
+  <span id="open-badge-label" class="font-display text-lg tracking-wider text-resto-neon neon-glow">
+    {initialLabel}
+  </span>
+  <span id="open-badge-detail" class="text-xs text-resto-cream/70 hidden sm:inline">
+    {initialDetail}
+  </span>
+</div>
+
+<script>
+  import { computeOpenStatus, nowInParis, type Hours } from "../lib/hours";
+
+  function update() {
+    const root = document.getElementById('open-badge');
+    if (!root) return;
+    const hours = JSON.parse(root.dataset.hours!) as Hours;
+    const status = computeOpenStatus(hours, nowInParis());
+    const dot = document.getElementById('open-badge-dot')!;
+    const label = document.getElementById('open-badge-label')!;
+    const detail = document.getElementById('open-badge-detail')!;
+
+    if (status.status === 'open') {
+      label.textContent = 'OUVERT';
+      label.className = 'font-display text-lg tracking-wider text-resto-neon neon-glow';
+      dot.className = 'w-2 h-2 rounded-full bg-resto-neon pulse-neon';
+      detail.textContent = `Ferme à ${status.closesAt}`;
+    } else {
+      label.textContent = 'FERMÉ';
+      label.className = 'font-display text-lg tracking-wider text-resto-cream/80';
+      dot.className = 'w-2 h-2 rounded-full bg-resto-cream/50';
+      if ('reason' in status && status.reason === 'exceptional') {
+        detail.textContent = status.details;
+      } else if ('opensAt' in status && status.opensAt) {
+        detail.textContent = `Ouvre ${status.openDay} à ${status.opensAt}`;
+      } else {
+        detail.textContent = 'Fermé';
+      }
+    }
+  }
+
+  update();
+  setInterval(update, 60_000); // refresh every minute
+</script>
