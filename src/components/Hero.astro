@@ -1,0 +1,50 @@
+---
+import { getGeneral } from "../lib/content";
+import OpenBadge from "./OpenBadge.astro";
+
+const general = await getGeneral();
+---
+<section
+  class="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
+  aria-label="Hero"
+>
+  <div
+    class="absolute inset-0 bg-cover bg-center"
+    style={`background-image: linear-gradient(rgba(15, 42, 29, 0.7), rgba(10, 10, 10, 0.85)), url('${general.photo_devanture}');`}
+  ></div>
+
+  <div class="relative z-10 text-center px-6 max-w-3xl">
+    <div class="mb-6 flex justify-center">
+      <OpenBadge />
+    </div>
+
+    <h1 class="font-display text-7xl md:text-9xl text-resto-neon neon-glow leading-none mb-4">
+      {general.nom.toUpperCase()}
+    </h1>
+
+    <p class="text-lg md:text-2xl text-resto-cream/90 mb-10 italic">
+      {general.slogan}
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href="#menu"
+        class="px-8 py-4 bg-resto-neon text-white font-display text-2xl tracking-widest rounded-full hover:bg-resto-neon-glow transition shadow-lg shadow-resto-neon/40"
+      >
+        VOIR LE MENU
+      </a>
+      <a
+        href={`tel:${general.telephone}`}
+        class="px-8 py-4 border-2 border-resto-cream/40 text-resto-cream font-display text-2xl tracking-widest rounded-full hover:border-resto-neon hover:text-resto-neon transition"
+      >
+        APPELER
+      </a>
+    </div>
+  </div>
+
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-8 h-8 text-resto-cream/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+    </svg>
+  </div>
+</section>
