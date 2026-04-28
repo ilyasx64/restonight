@@ -1,0 +1,40 @@
+---
+import { getDishesByCategory } from "../lib/content";
+import CategoryFilter from "./CategoryFilter.astro";
+import DishCard from "./DishCard.astro";
+
+const groups = await getDishesByCategory();
+const categories = groups.map((g) => g.category);
+---
+<section id="menu" class="py-16 md:py-24 bg-resto-green-deep">
+  <div class="max-w-7xl mx-auto px-4">
+    <header class="text-center mb-12">
+      <h2 class="font-display text-5xl md:text-7xl text-resto-neon neon-glow mb-3">
+        LE MENU
+      </h2>
+      <p class="text-resto-cream/70 max-w-xl mx-auto">
+        Tout ce qu'on sert, frais, généreux, fait sur place.
+      </p>
+    </header>
+
+    <CategoryFilter categories={categories} />
+
+    <div class="mt-10 space-y-16">
+      {groups.map((group) => (
+        group.dishes.length > 0 && (
+          <div data-category-section={group.category.id}>
+            <h3 class="font-display text-3xl md:text-4xl mb-6 flex items-center gap-3">
+              <span>{group.category.data.emoji ?? ''}</span>
+              <span>{group.category.data.nom.toUpperCase()}</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {group.dishes.map((dish) => (
+                <DishCard dish={dish} />
+              ))}
+            </div>
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+</section>
