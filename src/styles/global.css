@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-resto-green-deep: #0F2A1D;
+  --color-resto-green: #1B4332;
+  --color-resto-green-light: #2D5F3F;
+  --color-resto-neon: #FF1B6B;
+  --color-resto-neon-glow: #FF4D8A;
+  --color-resto-orange: #F59E0B;
+  --color-resto-cream: #FAF3E0;
+  --color-resto-kraft: #C9A876;
+  --color-resto-black: #0A0A0A;
+
+  --font-display: "Bebas Neue", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-resto-green-deep);
+    color: var(--color-resto-cream);
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .neon-glow {
+    text-shadow:
+      0 0 8px var(--color-resto-neon),
+      0 0 16px var(--color-resto-neon-glow),
+      0 0 32px rgba(255, 27, 107, 0.4);
+  }
+
+  .pulse-neon {
+    animation: pulse-neon 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-neon {
+    0%, 100% { opacity: 1; text-shadow: 0 0 8px var(--color-resto-neon), 0 0 16px var(--color-resto-neon-glow); }
+    50% { opacity: 0.85; text-shadow: 0 0 16px var(--color-resto-neon), 0 0 32px var(--color-resto-neon-glow); }
+  }
+
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+}
