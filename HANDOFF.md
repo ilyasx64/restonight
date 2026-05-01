@@ -1,94 +1,120 @@
 # Resto Night — Handoff
 
-Site URL (after deploy) : https://restonight.netlify.app
-Admin URL : https://restonight.netlify.app/admin/
+**🌐 Site live :** https://restonight.netlify.app
+**🔐 Admin :** https://restonight.netlify.app/admin/ *(activable une fois Identity configuré, voir étape 2 ci-dessous)*
+**📦 Repo GitHub :** https://github.com/ilyasx64/restonight
+**📊 Dashboard Netlify :** https://app.netlify.com/projects/restonight
 
-## Pour le gérant
+---
 
-1. Aller sur l'URL admin avec un navigateur
-2. Se connecter avec l'email invité (tu recevras une invitation par email après la mise en ligne)
-3. Modifier menu, horaires, photos depuis l'interface en français
-4. Cliquer "Publish now" → site mis à jour en ~30 secondes
+## ✅ Déjà fait
 
-## Étapes restantes pour la mise en ligne
+- Code complet et testé (24 tasks, 9 tests unitaires, type-check 0 erreur)
+- Push sur GitHub `ilyasx64/restonight` (branche `main`, tag `v1.0.0`)
+- Site Netlify créé et **premier déploiement effectué** via CLI
+- Site public accessible et fonctionnel
 
-Le code est complet et testé localement. Il reste à :
+## 🔧 À faire pour activer le CMS (3 étapes dans le dashboard Netlify)
 
-### 1. Pousser le code sur GitHub
+Le code et le déploiement sont OK, mais le **CMS au /admin** ne marchera pas tant que ces 3 cases ne sont pas cochées.
 
-```bash
-cd "c:/Users/ilyas/Desktop/RestoNight"
-gh repo create restonight --public --source=. --remote=origin --push
-```
+### Étape 1 — Connecter Netlify au repo GitHub (auto-deploy + git-gateway)
 
-(ou créer un repo manuellement sur github.com puis `git remote add origin <url> && git push -u origin main`)
+Sans ça, les modifs du gérant ne seront pas commitées (Decap a besoin de git-gateway, qui a besoin que Netlify connaisse le repo).
 
-### 2. Connecter Netlify
+1. Aller sur https://app.netlify.com/projects/restonight
+2. **Site configuration** → **Build & deploy** → **Continuous deployment** → **Link repository**
+3. Choisir GitHub → Authoriser l'app Netlify si demandé
+4. Sélectionner `ilyasx64/restonight`, branche `main`
+5. Build settings : déjà détectés depuis `netlify.toml` (build = `npm run build`, publish = `dist`)
+6. Cliquer **Save**
 
-1. Sign in sur https://app.netlify.com
-2. "Add new site" → "Import an existing project" → sélectionner le repo `restonight`
-3. La build command est auto-détectée depuis `netlify.toml`
-4. Cliquer "Deploy"
-5. Attendre la fin du build (~1 minute)
+Désormais : chaque push sur `main` déclenche un rebuild automatique (~1 min).
 
-### 3. Activer Netlify Identity et Git Gateway
+### Étape 2 — Activer Identity + Git Gateway
 
-Une fois le site déployé sur Netlify :
+1. Dashboard Netlify → onglet **Integrations** ou **Identity** (selon UI version)
+2. **Enable Identity**
+3. Dans Identity settings :
+   - **Registration** → mettre sur **Invite only**
+   - **Services** → **Git Gateway** → **Enable**
+4. **Invite users** → inviter ton email (et celui du gérant si différent)
 
-1. Aller dans "Site settings" → "Identity" → cliquer "Enable Identity"
-2. "Identity" → "Registration" → définir sur "Invite only"
-3. "Identity" → "Services" → "Git Gateway" → cliquer "Enable Git Gateway"
-4. "Identity" → "Invite users" → inviter l'email du gérant
-5. Le gérant reçoit un email de confirmation, clique sur le lien, définit son mot de passe
-6. Il peut maintenant se connecter sur `restonight.netlify.app/admin/`
+### Étape 3 — Confirmer l'invitation
 
-### 4. (Optionnel) Domaine custom
+1. Le destinataire reçoit un email "You've been invited..."
+2. Cliquer le lien, définir un mot de passe
+3. Aller sur https://restonight.netlify.app/admin/ → login → bingo, le CMS s'ouvre
 
-1. Acheter `restonight.fr` (Gandi, OVH, Namecheap — ~12€/an)
-2. Netlify "Domain settings" → "Add custom domain" → suivre les instructions DNS
-3. HTTPS est automatique
+---
 
-### 5. Test end-to-end
+## 🧪 Test end-to-end (après les 3 étapes ci-dessus)
 
-Après l'invitation acceptée :
-1. Le gérant se connecte à `/admin/`
-2. Modifie un champ (ex. le slogan)
-3. Clique "Publish"
-4. Attendre ~30s → la modification est visible sur le site public
+1. Login `/admin/`
+2. Aller dans "Plats" → modifier le prix d'un plat → **Publish**
+3. Decap commit sur GitHub (visible dans `https://github.com/ilyasx64/restonight/commits/main`)
+4. Netlify détecte le commit et rebuild (~30-60s)
+5. Refresh la home → nouveau prix visible
 
-## Maintenance technique
+---
 
-- **Repo** : github.com/<your-handle>/restonight
-- **Build local** : `npm install && npm run dev`
-- **Tests** : `npm test`
-- **Type check** : `npm run check`
-- **Déploiement** : automatique à chaque push sur `main`
+## 🌐 (Optionnel) Domaine custom `restonight.fr`
 
-## Troubleshooting
+1. Acheter `restonight.fr` chez Gandi / OVH / Namecheap (~12 €/an)
+2. Netlify dashboard → **Domain management** → **Add a domain**
+3. Suivre les instructions DNS (Netlify donne les enregistrements à mettre chez le registrar)
+4. HTTPS auto via Let's Encrypt (~5 min après propagation DNS)
+5. Mettre à jour le `site` dans `astro.config.mjs` → `https://restonight.fr` puis push
+
+## 🎨 (Optionnel) Vraie photo de devanture
+
+Le hero affiche actuellement juste un dégradé sombre (le fichier `/uploads/devanture-placeholder.jpg` n'existe pas).
+
+Pour mettre la vraie photo :
+1. Le gérant se connecte au CMS, va dans **Infos générales** → **Photo de la devanture** → upload
+2. Ou : poser le fichier dans `public/uploads/` localement et push
+
+---
+
+## 🔧 Maintenance technique
+
+| Action | Commande |
+|---|---|
+| Build local | `npm install && npm run dev` (ouvre http://localhost:4321) |
+| Tests unitaires | `npm test` |
+| Type check | `npm run check` |
+| Build prod | `npm run build` |
+| Deploy manuel | `npx netlify deploy --prod --build` (sans avoir besoin de push) |
+
+Une fois GitHub connecté à Netlify (étape 1), `git push origin main` redéploie automatiquement.
+
+## 🐛 Troubleshooting
 
 | Symptôme | Cause probable | Solution |
 |---|---|---|
-| Build Netlify échoue | Erreur TS ou contenu invalide | Voir les deploy logs Netlify, lancer `npm run check` localement |
-| Gérant ne peut pas se connecter | Identity ou Git Gateway pas activés | Vérifier "Identity → Users" et "Identity → Services → Git Gateway" |
-| Modifs CMS pas en ligne | Build en cours ou échec | Voir Netlify "Deploys" — délai normal ~30s |
-| Photo trop lourde | Astro l'optimise au build mais < 2 MB recommandé | Demander au gérant de redimensionner avant upload |
-| Décalage horaire badge OUVERT | Conversion Paris/UTC | Vérifier que `nowInParis()` est bien utilisé dans `OpenBadge.astro` |
+| Page `/admin/` charge mais ne se connecte pas | Identity ou Git Gateway pas activés | Refaire étape 2 du handoff |
+| `/admin/` blanc / erreur "no backend" | Le repo n'est pas linké à Netlify | Refaire étape 1 du handoff |
+| Modifs CMS pas en ligne | Build Netlify pas terminé | Voir https://app.netlify.com/projects/restonight/deploys |
+| Build Netlify échoue | Erreur TS ou contenu invalide | Voir les deploy logs ; reproduire avec `npm run check` |
+| Photo upload trop lourde | Astro optimise mais < 2 MB recommandé en source | Compresser avant upload |
+| Décalage horaire badge OUVERT | Toujours utiliser `nowInParis()` | Déjà géré dans `OpenBadge.astro` |
 
-## Coût annuel estimé
+## 💰 Coût annuel
 
 | Poste | Coût |
 |---|---|
-| Netlify free tier (100 GB/mois bande passante) | 0 € |
+| Netlify free tier (100 GB/mois) | 0 € |
 | Decap CMS | 0 € |
 | Netlify Identity (jusqu'à 5 utilisateurs) | 0 € |
 | GitHub repo public | 0 € |
 | Domaine `.fr` (optionnel) | ~12 €/an |
-| **Total annuel** | **~12 €** |
+| **Total annuel** | **~12 €** *(uniquement si domaine custom)* |
 
-## Architecture en bref
+## 🏗️ Architecture en bref
 
-- **Astro 5** : génère du HTML statique au build
-- **Tailwind 4** : styling avec palette custom (vert bouteille + néon rose)
-- **Decap CMS** : interface admin pour le gérant, écrit dans GitHub
-- **Netlify** : héberge le site et déclenche le rebuild à chaque commit GitHub
-- **Spec & plan** : voir `docs/superpowers/specs/` et `docs/superpowers/plans/`
+- **Astro 5** — génère du HTML statique au build
+- **Tailwind 4** — styling, palette custom vert bouteille + néon rose
+- **Decap CMS** — interface admin web, écrit en Markdown/JSON dans GitHub
+- **Netlify Identity** — authentification du gérant (email + mot de passe)
+- **Netlify** — hébergement, CDN mondial, HTTPS auto, rebuild auto à chaque commit
+- **Spec & plan** — `docs/superpowers/specs/` et `docs/superpowers/plans/`
