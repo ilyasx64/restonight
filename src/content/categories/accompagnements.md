@@ -1,5 +1,5 @@
 ---
-nom: "Accompagnements"
+nom: Nos Accompagnements
 ordre: 5
-emoji: "🍟"
+emoji: 🍟
 ---
