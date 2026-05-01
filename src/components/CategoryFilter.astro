@@ -26,7 +26,7 @@ const { categories } = Astro.props;
         <li>
           <button
             type="button"
-            data-category={cat.id}
+            data-category={cat.id.replace(/\.md$/, '')}
             class="cat-chip px-4 py-2 rounded-full bg-resto-green-light/50 text-resto-cream font-medium text-sm whitespace-nowrap hover:bg-resto-green-light transition"
           >
             {cat.data.emoji ?? ''} {cat.data.nom}

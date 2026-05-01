@@ -28,6 +28,10 @@ export async function getDishesAvailable() {
   return all.filter((d) => d.data.disponible !== false);
 }
 
+function categorySlug(id: string): string {
+  return id.replace(/\.md$/, '');
+}
+
 export async function getDishesByCategory() {
   const [categories, dishes] = await Promise.all([
     getCategoriesSorted(),
@@ -35,6 +39,7 @@ export async function getDishesByCategory() {
   ]);
   return categories.map((cat) => ({
     category: cat,
-    dishes: dishes.filter((d) => d.data.categorie === cat.id),
+    slug: categorySlug(cat.id),
+    dishes: dishes.filter((d) => d.data.categorie === categorySlug(cat.id)),
   }));
 }
