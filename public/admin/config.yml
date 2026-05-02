@@ -116,7 +116,8 @@ collections:
     label_singular: "Catégorie"
     folder: "src/content/categories"
     create: true
-    slug: "{{slug}}"
+    slug: "{{fields.nom | slugify}}"
+    identifier_field: "nom"
     extension: "md"
     format: "frontmatter"
     fields:
@@ -129,7 +130,8 @@ collections:
     label_singular: "Plat"
     folder: "src/content/dishes"
     create: true
-    slug: "{{slug}}"
+    slug: "{{fields.nom | slugify}}"
+    identifier_field: "nom"
     extension: "md"
     format: "frontmatter"
     fields:
@@ -141,7 +143,7 @@ collections:
         widget: "relation"
         collection: "categories"
         search_fields: ["nom"]
-        value_field: "{{slug}}"
+        value_field: "slug"
         display_fields: ["nom"]
       - { label: "Photo", name: "photo", widget: "image", required: false }
       - label: "Tags"
