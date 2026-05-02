@@ -1,5 +1,5 @@
 ---
-nom: "Boissons"
-ordre: 9
-emoji: "🥤"
+nom: Nos Boissons
+ordre: 12
+emoji: 🥤
 ---
