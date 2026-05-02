@@ -2,8 +2,6 @@ backend:
   name: github
   repo: ilyasx64/restonight
   branch: main
-  auth_type: pkce
-  app_id: PLACEHOLDER_GITHUB_OAUTH_CLIENT_ID
 
 publish_mode: simple
 media_folder: "public/uploads"
