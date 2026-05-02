@@ -1,12 +1,40 @@
 {
   "schedule": {
-    "lundi":    { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "mardi":    { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "mercredi": { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "jeudi":    { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "vendredi": { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "samedi":   { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" },
-    "dimanche": { "ferme": false, "ouverture": "18:00", "fermeture": "02:00" }
+    "lundi": {
+      "ferme": false,
+      "ouverture": "14:00",
+      "fermeture": "02:00"
+    },
+    "mardi": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    },
+    "mercredi": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    },
+    "jeudi": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    },
+    "vendredi": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    },
+    "samedi": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    },
+    "dimanche": {
+      "ferme": false,
+      "ouverture": "18:00",
+      "fermeture": "02:00"
+    }
   },
   "fermetures_exceptionnelles": []
 }
