@@ -1,13 +1,16 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: ilyasx64/restonight
   branch: main
+  auth_type: pkce
+  app_id: PLACEHOLDER_GITHUB_OAUTH_CLIENT_ID
 
 publish_mode: simple
 media_folder: "public/uploads"
 public_folder: "/uploads"
 locale: "fr"
-site_url: https://restonight.netlify.app
-display_url: https://restonight.netlify.app
+site_url: https://restonight.fr
+display_url: https://restonight.fr
 logo_url: /favicon.svg
 
 collections:

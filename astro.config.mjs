@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://restonight.netlify.app',
+  site: 'https://restonight.fr',
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [sitemap()],
