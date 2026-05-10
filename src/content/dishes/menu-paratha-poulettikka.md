@@ -6,6 +6,7 @@ categorie: Paratha
 photo: ''
 tags:
   - populaire
+  - epice
 disponible: true
 variantes: []
 ---
