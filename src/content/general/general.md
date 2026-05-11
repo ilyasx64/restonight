@@ -1,8 +1,8 @@
 ---
-nom: Resto Night !
-slogan: Tacos, kebabs, burgers — jusqu'à 02h
+nom: Resto Night
+slogan: << Votre faim, Notre mission >>
 telephone: '0322470183'
-email: ''
+email: restonight34@gmail.com
 adresse: 34 Rue du Hocquet, 80000 Amiens
 photo_devanture: /uploads/devanture-placeholder.jpg
 facebook_url: https://www.facebook.com/Restonight34
