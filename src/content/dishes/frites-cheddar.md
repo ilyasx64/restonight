@@ -1,8 +1,9 @@
 ---
-nom: "Frites Cheddar"
-description: "Frites maison nappées de cheddar fondu."
-prix: 3.90
-categorie: "accompagnements"
-tags: []
+nom: Frites Cheddar
+description: Frites nappées de cheddar fondu maison.
+prix: 3.5
+categorie: Accompagnements
+tags:
+  - populaire
 disponible: true
 ---
