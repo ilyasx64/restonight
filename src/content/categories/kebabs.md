@@ -1,5 +1,5 @@
 ---
-nom: Nos Sandwich
+nom: Nos Sandwichs
 ordre: 3
 emoji: 🥙
 ---
