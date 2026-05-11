@@ -1,5 +1,5 @@
 ---
-nom: "Kebabs"
+nom: Nos Sandwich
 ordre: 3
-emoji: "🥙"
+emoji: 🥙
 ---
