@@ -1,12 +1,11 @@
 ---
-nom: Tacos XL Poulet Mariné
-description: Galette grillée, poulet mariné, frites, fromage fondu, sauce au choix.
+nom: Tacos XL
+description: 2 Galette grillée, Viande au choix, sauce au choix,  frites, fromagère fondu maison.
 prix: 9.5
-categorie: tacos
+categorie: Tacos
 photo: /uploads/image_2026-05-01_041028992.png
 tags:
   - populaire
-  - epice
 disponible: true
 variantes:
   - nom: XL
